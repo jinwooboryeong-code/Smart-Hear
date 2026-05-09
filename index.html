@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>박진우보청기 청각전문그룹 스마트 상담 시스템 V2</title>
+    <title>박진우보청기 청각전문그룹 스마트 상담 시스템 V2.1</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --primary: #003366; --dark: #0f172a; --blue: #38bdf8; --accent: #f43f5e; --success: #2ecc71; --warning: #e74c3c; }
@@ -38,7 +38,7 @@
         .hl-mapper { position: relative; width: 100%; max-width: 100%; margin: 0 auto; border-radius: 15px; border: 1px solid #e2e8f0; overflow: hidden; background: #fff; }
         .hl-hotspot { position: absolute; cursor: pointer; z-index: 10; }
 
-        /* 4. 청력 분석 (기존 유지) */
+        /* 4. 청력 분석 */
         .chart-container { height: 500px; margin: 20px 0; background: #fff; border-radius: 20px; padding: 20px; border: 1px solid #e2e8f0; position: relative; overflow-x: auto; }
         .chart-inner { min-width: 850px; height: 100%; position: relative; }
         .avg-display-container { display: flex; justify-content: space-around; background: #f8fafc; padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
@@ -53,7 +53,7 @@
         .btn.active-r { border-color: #d93025; color: #d93025; background: #fff5f5; }
         .btn.active-l { border-color: #1a73e8; color: #1a73e8; background: #f0f7ff; }
 
-        /* --- 신규 시뮬레이터 디자인 적용 --- */
+        /* 신규 시뮬레이터 디자인 */
         .sim-section { background: #eaeff2; padding: 30px; border-radius: 30px; margin-top: 20px; }
         .preset-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
         .preset-btn { padding: 12px 5px; border: 2px solid #eee; border-radius: 12px; background: white; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 0.85rem; }
@@ -120,7 +120,16 @@
     </div>
 
     <div class="section">
-        <h2>2. 난청의 유형 (해당 유형을 직접 클릭하세요)</h2>
+        <h2>2. 소리 전달 시뮬레이션 영상</h2>
+        <div class="media-box" style="background:#000;">
+            <video controls style="width: 100%;">
+                <source src="video.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. 난청의 유형 (해당 유형을 직접 클릭하세요)</h2>
         <div class="hl-mapper">
             <img id="hlTypeImg" src="1.jpg" style="width: 100%; display: block;" alt="난청의 유형">
             <div class="hl-hotspot" style="top: 0; left: 0; width: 33.3%; height: 100%;" onclick="toggleHlImg('3.jpg')"></div>
@@ -131,7 +140,7 @@
     </div>
 
     <div class="section">
-        <h2>3. 청력 분석 및 맞춤형 솔루션 시뮬레이션</h2>
+        <h2>4. 청력 분석 및 맞춤형 솔루션 시뮬레이션</h2>
         <div class="btn-group">
             <button id="btnR" class="btn active-r" onclick="setChartMode('R')">우측(○) 입력</button>
             <button id="btnL" class="btn" onclick="setChartMode('L')">좌측(✕) 입력</button>
@@ -201,14 +210,16 @@
     </div>
 
     <div class="section">
-        <h2>4. 보청기 형태 및 상담 절차 안내</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div class="media-box" onclick="openModal('hearing_aid_styles.jpg')">
-                <img src="hearing_aid_styles.jpg" style="width: 100%;" alt="보청기 형태 안내">
-            </div>
-            <div class="media-box" onclick="openModal('7.jpg')">
-                <img src="7.jpg" style="width: 100%;" alt="상담 절차">
-            </div>
+        <h2>5. 보청기 형태 안내</h2>
+        <div class="media-box" onclick="openModal('hearing_aid_styles.jpg')">
+            <img src="hearing_aid_styles.jpg" style="width: 100%;" alt="보청기 형태 안내">
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>6. 보청기 적응 및 상담 절차</h2>
+        <div class="media-box" style="background: transparent; border: none;" onclick="openModal('7.jpg')">
+            <img src="7.jpg" alt="보청기 적응 및 상담 절차" style="max-width: 100%; width: auto; height: auto; border-radius: 15px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
         </div>
     </div>
 
@@ -217,7 +228,7 @@
 <div id="imageModal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
 
 <script>
-    /* --- 기존 로직 통합 --- */
+    /* --- 기존 스크립트 로직 --- */
     function toggleHlImg(targetSrc) {
         const imgEl = document.getElementById('hlTypeImg');
         imgEl.src = (imgEl.getAttribute('src') !== '1.jpg') ? '1.jpg' : targetSrc;
@@ -245,7 +256,7 @@
 
     function openModal(src) { document.getElementById('modalImg').src = src; document.getElementById('imageModal').style.display = 'flex'; }
 
-    /* --- 청력도 로직 --- */
+    /* --- 청력도 및 평균 계산 로직 --- */
     let chartMode = 'R';
     const ctxChart = document.getElementById('audiogramChart').getContext('2d');
 
@@ -261,7 +272,7 @@
             ctx.save();
             zones.forEach(z => {
                 let sy = y.getPixelForValue(z.m); let ey = y.getPixelForValue(z.x);
-                ctx.fillStyle = z.c; ctx.fillRect(left, sy, right - left + 360, ey - sy);
+                ctx.fillStyle = z.c; ctx.fillRect(left, sy, (right - left) + 360, ey - sy);
                 ctx.fillStyle = "#334155"; ctx.font = "bold 15px Pretendard"; ctx.fillText(z.t1, right + 20, (sy + ey) / 2);
             });
             ctx.restore();
@@ -354,7 +365,6 @@
         let blurVal = Math.max(0, (nerve - (isBinaural ? 15 : 0)) / 10);
         textTarget.style.filter = `blur(${blurVal}px)`;
         textTarget.style.fontSize = (volume * 1.6) + "rem";
-        textTarget.style.color = isBinaural ? "#fff" : "#ccc";
 
         if (isBinaural && isNR && noise > 40) {
             statusMsg.innerHTML = "✨ <span class='highlight'>프리미엄 청취:</span> 양이 통신과 소음 억제가 결합되어 대화가 쾌적합니다.";
@@ -389,7 +399,7 @@
         requestAnimationFrame(drawWave);
     }
 
-    window.onresize = () => { canvas.width = canvas.parentElement.clientWidth; canvas.height = 220; };
+    window.onresize = () => { if(canvas.parentElement) { canvas.width = canvas.parentElement.clientWidth; canvas.height = 220; } };
     window.onresize();
     [nerveIn, noiseIn, volumeIn].forEach(el => el.oninput = updateSim);
     nrToggle.onchange = updateSim;
