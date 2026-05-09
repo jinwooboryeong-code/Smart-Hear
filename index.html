@@ -18,14 +18,33 @@
 
         /* 귀 구조 */
         .ear-simulation-container { background: #f1f5f9; padding: 30px; border-radius: 20px; margin-bottom: 20px; text-align: center; }
-        .image-mapper { position: relative; width: 100%; max-width: 900px; margin: 0 auto; padding-bottom: 60%; background-image: url('ear_structure.jpg'); background-size: cover; background-position: center; border-radius: 15px; border: 2px solid #cbd5e1; }
-        .hotspot { position: absolute; cursor: pointer; border-radius: 50%; background: rgba(255,255,255,0.01); transition: 0.3s; }
+        .image-mapper { position: relative; width: 100%; max-width: 900px; margin: 0 auto; padding-bottom: 60%; background-image: url('ear_structure.jpg'); background-size: cover; background-position: center; border-radius: 15px; border: 2px solid #cbd5e1; overflow: hidden; }
+        .hotspot { position: absolute; cursor: pointer; border-radius: 50%; background: rgba(255,255,255,0.01); transition: 0.3s; z-index: 10; }
         .hotspot:hover, .hotspot.active { background: rgba(244,63,94,0.2); border: 2px solid var(--accent); }
         #spot-outer { top: 20%; left: 2%; width: 30%; height: 55%; }
         #spot-middle { top: 35%; left: 40%; width: 18%; height: 30%; }
         #spot-inner { top: 28%; left: 60%; width: 20%; height: 38%; }
         #spot-nerve { top: 22%; left: 81%; width: 17%; height: 32%; }
         .desc-panel { background: white; margin-top: 20px; padding: 20px; border-radius: 15px; border: 1px solid #e2e8f0; min-height: 80px; text-align: center; }
+
+        /* --- 소리 전달 시각화 효과 (크기 증가, 부드럽게 이어지는 이동 애니메이션) --- */
+        .sound-particle {
+            position: absolute; width: 22px; height: 22px;
+            background: var(--accent); border-radius: 50%;
+            pointer-events: none; z-index: 20;
+            left: -5%; top: 40%; opacity: 0;
+            transition: left 0.7s ease-in-out, top 0.7s ease-in-out, opacity 0.3s;
+        }
+        .sound-particle.active-particle {
+            opacity: 1;
+            animation: pulseGlow 1.2s infinite ease-in-out;
+        }
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 20px 8px rgba(244, 63, 94, 0.6); }
+            50% { transform: translate(-50%, -50%) scale(1.3); box-shadow: 0 0 30px 15px rgba(244, 63, 94, 0.9); }
+            100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 20px 8px rgba(244, 63, 94, 0.6); }
+        }
+        /* ---------------------------------------- */
 
         /* 청력도 및 평균값 표시 */
         .chart-container { height: 600px; margin: 20px 0; background: #fff; border-radius: 20px; padding: 20px; border: 1px solid #e2e8f0; position: relative; overflow-x: auto; }
@@ -43,6 +62,10 @@
         .btn { padding: 12px 35px; border: 2px solid #ddd; background: #fff; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1.1rem; }
         .btn.active-r { border-color: #d93025; color: #d93025; background: #fff5f5; }
         .btn.active-l { border-color: #1a73e8; color: #1a73e8; background: #f0f7ff; }
+
+        /* 난청 유형 이미지 클릭 전용 스타일 */
+        .hl-mapper { position: relative; width: 100%; max-width: 100%; margin: 0 auto; border-radius: 15px; border: 1px solid #e2e8f0; overflow: hidden; background: #fff; }
+        .hl-hotspot { position: absolute; cursor: pointer; z-index: 10; }
 
         /* 시뮬레이터 */
         .sim-container { background: var(--dark); color: white; padding: 40px; border-radius: 24px; text-align: center; }
@@ -69,6 +92,8 @@
         <h2>1. 귀의 구조와 소리 전달 경로</h2>
         <div class="ear-simulation-container">
             <div class="image-mapper">
+                <div id="soundParticle" class="sound-particle"></div>
+                
                 <div class="hotspot" id="spot-outer" onclick="showPath('outer')"></div>
                 <div class="hotspot" id="spot-middle" onclick="showPath('middle')"></div>
                 <div class="hotspot" id="spot-inner" onclick="showPath('inner')"></div>
@@ -87,10 +112,17 @@
     </div>
 
     <div class="section">
-        <h2>3. 난청의 유형 (클릭하여 이미지 넘기기)</h2>
-        <div class="media-box" style="border:none; cursor:pointer;" onclick="nextHlType()">
-            <img id="hlTypeImg" src="1.jpg" style="max-width:100%; width: 100%; border-radius:15px; border: 1px solid #e2e8f0;" alt="난청의 유형">
+        <h2>3. 난청의 유형 (해당 유형을 직접 클릭하세요)</h2>
+        <div class="hl-mapper">
+            <img id="hlTypeImg" src="1.jpg" style="width: 100%; display: block;" alt="난청의 유형">
+            
+            <div class="hl-hotspot" style="top: 0; left: 0; width: 33.3%; height: 100%;" onclick="toggleHlImg('3.jpg')"></div>
+            
+            <div class="hl-hotspot" style="top: 0; left: 33.3%; width: 33.4%; height: 100%;" onclick="toggleHlImg('4.jpg')"></div>
+            
+            <div class="hl-hotspot" style="top: 0; left: 66.7%; width: 33.3%; height: 100%;" onclick="toggleHlImg('5.jpg')"></div>
         </div>
+        <div style="text-align: center; font-size: 0.95rem; color: #64748b; margin-top: 15px;">※ 이미지 안의 각 난청 종류를 터치/클릭해보세요. (다시 클릭하면 처음으로 돌아옵니다.)</div>
     </div>
 
     <div class="section">
@@ -159,28 +191,49 @@
 <div id="imageModal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
 
 <script>
-    // 난청 유형 이미지 클릭 이벤트
-    const hlImages = ['1.jpg', '3.jpg', '4.jpg', '5.jpg'];
-    let hlIndex = 0;
-    function nextHlType() {
-        hlIndex++;
-        if(hlIndex >= hlImages.length) hlIndex = 0;
-        document.getElementById('hlTypeImg').src = hlImages[hlIndex];
+    // 난청 유형 이미지 클릭 로직
+    function toggleHlImg(targetSrc) {
+        const imgEl = document.getElementById('hlTypeImg');
+        const currentSrc = imgEl.getAttribute('src');
+        
+        // 상세 이미지가 열려있는 상태에서 클릭하면 무조건 처음(1.jpg)으로 복귀
+        if (currentSrc !== '1.jpg') {
+            imgEl.src = '1.jpg';
+        } else {
+            // 처음 상태(1.jpg)에서 특정 영역을 클릭하면 해당 상세 이미지로 변경
+            imgEl.src = targetSrc;
+        }
     }
 
-    // 1. 귀 구조 인터랙티브
+    // 1. 귀 구조 인터랙티브 및 시각화 효과
     const pathData = {
         outer: { title: "외이 (Outer Ear)", desc: "소리를 모아 외이도를 통해 전달합니다." },
         middle: { title: "중이 (Middle Ear)", desc: "고막과 이소골이 진동을 증폭합니다." },
         inner: { title: "내이 (Inner Ear)", desc: "달팽이관이 진동을 전기신호로 바꿉니다." },
         nerve: { title: "청신경 (Auditory Nerve)", desc: "뇌로 신호를 보내 소리를 인지하게 합니다." }
     };
+
+    // 각 부위별 도달 목표 좌표 (중앙 지점)
+    const centerPos = {
+        outer: { x: '17%', y: '47%' },
+        middle: { x: '49%', y: '50%' },
+        inner: { x: '70%', y: '47%' },
+        nerve: { x: '89%', y: '38%' }
+    };
+
     function showPath(part) {
         document.querySelectorAll('.hotspot').forEach(el => el.classList.remove('active'));
         document.getElementById(`spot-${part}`).classList.add('active');
         const data = pathData[part];
         document.getElementById('desc-panel').innerHTML = `<h3>${data.title}</h3><p>${data.desc}</p>`;
+
+        // 추가된 소리 전달 시각화 로직 (이어지게 전달됨)
+        const sp = document.getElementById('soundParticle');
+        sp.classList.add('active-particle');
+        sp.style.left = centerPos[part].x;
+        sp.style.top = centerPos[part].y;
     }
+
     function openModal(src) { document.getElementById('modalImg').src = src; document.getElementById('imageModal').style.display = 'flex'; }
 
     // 2. 청력도 구현 및 6분법 계산 로직
