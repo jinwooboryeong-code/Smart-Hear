@@ -99,6 +99,22 @@
 </head>
 <body>
 
+<div id="password-lock" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f8fafc; z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <h2 style="color: #003366; margin-bottom: 20px;">시스템 접속</h2>
+    <input type="password" id="pw-input" style="padding: 15px; font-size: 1.5rem; border: 2px solid #cbd5e1; border-radius: 12px; text-align: center; margin-bottom: 15px; outline: none; width: 200px;" placeholder="비밀번호" onkeypress="if(event.key === 'Enter') checkPassword()">
+    <button onclick="checkPassword()" style="padding: 15px 40px; background: #003366; color: white; border: none; border-radius: 12px; font-size: 1.2rem; font-weight: bold; cursor: pointer; width: 234px;">확인</button>
+    <script>
+        function checkPassword() {
+            if(document.getElementById('pw-input').value === '4507') {
+                document.getElementById('password-lock').style.display = 'none';
+            } else {
+                alert('비밀번호가 일치하지 않습니다.');
+                document.getElementById('pw-input').value = '';
+                document.getElementById('pw-input').focus();
+            }
+        }
+    </script>
+</div>
 <div class="container">
     <h1>박진우보청기 청각전문그룹 스마트 상담 시스템</h1>
 
