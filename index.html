@@ -312,7 +312,8 @@
             },
             onClick: (e) => {
                 const pos = Chart.helpers.getRelativePosition(e, chart);
-                const x = chart.scales.x.getValueForPixel(pos.x);
+                // Math.round를 적용하여 인덱스 소수점 오류 해결
+                const x = Math.round(chart.scales.x.getValueForPixel(pos.x));
                 const y = Math.round(chart.scales.y.getValueForPixel(pos.y)/5)*5;
                 if(x >=0 && x <=5) { 
                     chart.data.datasets[chartMode==='R'?0:1].data[x] = y; 
