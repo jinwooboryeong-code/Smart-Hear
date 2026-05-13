@@ -53,7 +53,7 @@
         .btn.active-r { border-color: #d93025; color: #d93025; background: #fff5f5; }
         .btn.active-l { border-color: #1a73e8; color: #1a73e8; background: #f0f7ff; }
 
-        /* 신규 시뮬레이터 디자인 */
+        /* 시뮬레이터 */
         .sim-section { background: #eaeff2; padding: 30px; border-radius: 30px; margin-top: 20px; }
         .preset-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
         .preset-btn { padding: 12px 5px; border: 2px solid #eee; border-radius: 12px; background: white; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 0.85rem; }
@@ -115,6 +115,7 @@
         }
     </script>
 </div>
+
 <div class="container">
     <h1>박진우보청기 청각전문그룹 스마트 상담 시스템</h1>
 
@@ -145,286 +146,15 @@
     </div>
 
     <div class="section">
-        <h2>3. 난청의 유형 (해당 유형을 직접 클릭하세요)</h2>
+        <h2>3. 난청의 유형</h2>
         <div class="hl-mapper">
             <img id="hlTypeImg" src="1.jpg" style="width: 100%; display: block;" alt="난청의 유형">
             <div class="hl-hotspot" style="top: 0; left: 0; width: 33.3%; height: 100%;" onclick="toggleHlImg('3.jpg')"></div>
             <div class="hl-hotspot" style="top: 0; left: 33.3%; width: 33.4%; height: 100%;" onclick="toggleHlImg('4.jpg')"></div>
             <div class="hl-hotspot" style="top: 0; left: 66.7%; width: 33.3%; height: 100%;" onclick="toggleHlImg('5.jpg')"></div>
         </div>
-        <div style="text-align: center; font-size: 0.95rem; color: #64748b; margin-top: 15px;">※ 이미지 안의 각 난청 종류를 터치/클릭해보세요.</div>
     </div>
 
     <div class="section">
         <h2>4. 청력 분석 및 맞춤형 솔루션 시뮬레이션</h2>
-        <div class="btn-group">
-            <button id="btnR" class="btn active-r" onclick="setChartMode('R')">우측(○) 입력</button>
-            <button id="btnL" class="btn" onclick="setChartMode('L')">좌측(✕) 입력</button>
-        </div>
-        
-        <div class="chart-container">
-            <div class="chart-inner">
-                <canvas id="audiogramChart"></canvas>
-            </div>
-        </div>
-
-        <div class="avg-display-container">
-            <div class="avg-box">
-                <div class="avg-label">우측(R) 평균 (6분법)</div>
-                <div id="avgR" class="avg-value right">20.0<span class="unit">dB</span></div>
-            </div>
-            <div class="avg-box" style="border-left: 1px solid #e2e8f0;">
-                <div class="avg-label">좌측(L) 평균 (6분법)</div>
-                <div id="avgL" class="avg-value left">30.0<span class="unit">dB</span></div>
-            </div>
-        </div>
-
-        <div class="sim-section">
-            <div class="preset-grid">
-                <button class="preset-btn" onclick="setPreset(0, 5, 100)">🏠 조용한 환경</button>
-                <button class="preset-btn" onclick="setPreset(45, 75, 120)">🍴 식당 환경</button>
-                <button class="preset-btn" onclick="setPreset(40, 60, 130)">⛪ 교회 환경</button>
-                <button class="preset-btn" onclick="setPreset(20, 85, 150)">🚗 차안 환경</button>
-            </div>
-
-            <div class="wearing-mode">
-                <button id="btn-binaural" class="mode-btn active" onclick="setWearingMode(true)">🔗 양이 착용 (양측)</button>
-                <button id="btn-monaural" class="mode-btn single" onclick="setWearingMode(false)">⚠️ 편이 착용 (한쪽)</button>
-            </div>
-            
-            <div id="screen" class="display-box">
-                <canvas id="waveform"></canvas>
-                <span id="text-target">보청기는 단순한 스피커가 아니라 뇌로 전달되는 해상도를 관리합니다.</span>
-            </div>
-
-            <div class="controls">
-                <div class="control-group">
-                    <label>청신경 손상도<span id="val-nerve">0%</span></label>
-                    <input type="range" id="nerve-damage" min="0" max="100" value="0">
-                </div>
-                <div class="control-group">
-                    <label>주변 노이즈 강도<span id="val-noise">5%</span></label>
-                    <input type="range" id="noise-level" min="0" max="100" value="5">
-                </div>
-                <div class="control-group">
-                    <label>보청기 증폭량<span id="val-volume">100%</span></label>
-                    <input type="range" id="volume" min="50" max="250" value="100">
-                </div>
-            </div>
-
-            <div class="switch-container">
-                <div class="switch-card">
-                    <span>🛡️ 소음 억제 기술 (NR)</span>
-                    <label class="toggle"><input type="checkbox" id="nr-toggle"><span class="slider"></span></label>
-                </div>
-            </div>
-
-            <div class="info-panel" id="status-msg">
-                환경을 선택하고 보청기 착용 효과를 확인해 보세요.
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>5. 보청기 형태 안내</h2>
-        <div class="media-box" onclick="openModal('hearing_aid_styles.jpg')">
-            <img src="hearing_aid_styles.jpg" style="width: 100%;" alt="보청기 형태 안내">
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>6. 보청기 적응 및 상담 절차</h2>
-        <div class="media-box" style="background: transparent; border: none;" onclick="openModal('7.jpg')">
-            <img src="7.jpg" alt="보청기 적응 및 상담 절차" style="max-width: 100%; width: auto; height: auto; border-radius: 15px; border: 1px solid #e2e8f0; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
-        </div>
-    </div>
-
-</div>
-
-<div id="imageModal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
-
-<script>
-    /* --- 기존 스크립트 로직 --- */
-    function toggleHlImg(targetSrc) {
-        const imgEl = document.getElementById('hlTypeImg');
-        imgEl.src = (imgEl.getAttribute('src') !== '1.jpg') ? '1.jpg' : targetSrc;
-    }
-
-    const pathData = {
-        outer: { title: "외이 (Outer Ear)", desc: "소리를 모아 외이도를 통해 전달합니다." },
-        middle: { title: "중이 (Middle Ear)", desc: "고막과 이소골이 진동을 증폭합니다." },
-        inner: { title: "내이 (Inner Ear)", desc: "달팽이관이 진동을 전기신호로 바꿉니다." },
-        nerve: { title: "청신경 (Auditory Nerve)", desc: "뇌로 신호를 보내 소리를 인지하게 합니다." }
-    };
-
-    const centerPos = {
-        outer: { x: '17%', y: '47%' }, middle: { x: '49%', y: '50%' }, inner: { x: '70%', y: '47%' }, nerve: { x: '89%', y: '38%' }
-    };
-
-    function showPath(part) {
-        document.querySelectorAll('.hotspot').forEach(el => el.classList.remove('active'));
-        document.getElementById(`spot-${part}`).classList.add('active');
-        const data = pathData[part];
-        document.getElementById('desc-panel').innerHTML = `<h3>${data.title}</h3><p>${data.desc}</p>`;
-        const sp = document.getElementById('soundParticle');
-        sp.classList.add('active-particle'); sp.style.left = centerPos[part].x; sp.style.top = centerPos[part].y;
-    }
-
-    function openModal(src) { document.getElementById('modalImg').src = src; document.getElementById('imageModal').style.display = 'flex'; }
-
-    /* --- 청력도 및 평균 계산 로직 --- */
-    let chartMode = 'R';
-    const ctxChart = document.getElementById('audiogramChart').getContext('2d');
-
-    const audiogramBackground = {
-        id: 'audiogramBackground',
-        beforeDraw: (chart) => {
-            const {ctx, chartArea: {top, bottom, left, right}, scales: {y}} = chart;
-            const zones = [
-                {m: -10, x: 20, c: "#f4f9ff", t1: "정상 청력"}, {m: 20, x: 40, c: "#dcedfc", t1: "경도 난청"},
-                {m: 40, x: 70, c: "#b0d4f5", t1: "중도 난청"}, {m: 70, x: 90, c: "#87bded", t1: "고도 난청"},
-                {m: 90, x: 120, c: "#60a8e6", t1: "심도 난청"}
-            ];
-            ctx.save();
-            zones.forEach(z => {
-                let sy = y.getPixelForValue(z.m); let ey = y.getPixelForValue(z.x);
-                ctx.fillStyle = z.c; ctx.fillRect(left, sy, (right - left) + 360, ey - sy);
-                ctx.fillStyle = "#334155"; ctx.font = "bold 15px Pretendard"; ctx.fillText(z.t1, right + 20, (sy + ey) / 2);
-            });
-            ctx.restore();
-        }
-    };
-
-    const chart = new Chart(ctxChart, {
-        type: 'line', plugins: [audiogramBackground],
-        data: {
-            labels: ['250', '500', '1k', '2k', '4k', '8k'],
-            datasets: [
-                { label: '우측(R)', data: [20,20,20,20,20,20], borderColor: '#d93025', backgroundColor: '#d93025', pointRadius: 10, fill: false },
-                { label: '좌측(L)', data: [30,30,30,30,30,30], borderColor: '#1a73e8', backgroundColor: '#1a73e8', pointStyle: 'crossRot', pointRadius: 12, fill: false }
-            ]
-        },
-        options: {
-            maintainAspectRatio: false, layout: { padding: { left: 60, right: 380, top: 60, bottom: 20 } },
-            scales: {
-                y: { reverse: true, min: -10, max: 120, ticks: { stepSize: 10 } },
-                x: { position: 'top' }
-            },
-            onClick: (e) => {
-                const pos = Chart.helpers.getRelativePosition(e, chart);
-                // Math.round를 적용하여 인덱스 소수점 오류 해결
-                const x = Math.round(chart.scales.x.getValueForPixel(pos.x));
-                const y = Math.round(chart.scales.y.getValueForPixel(pos.y)/5)*5;
-                if(x >=0 && x <=5) { 
-                    chart.data.datasets[chartMode==='R'?0:1].data[x] = y; 
-                    chart.update(); calculateAverage(); 
-                }
-            }
-        }
-    });
-
-    function calculateAverage() {
-        const dataR = chart.data.datasets[0].data; const dataL = chart.data.datasets[1].data; 
-        const avgR = (dataR[1] + (dataR[2] * 2) + (dataR[3] * 2) + dataR[4]) / 6;
-        const avgL = (dataL[1] + (dataL[2] * 2) + (dataL[3] * 2) + dataL[4]) / 6;
-        document.getElementById('avgR').innerHTML = `${avgR.toFixed(1)}<span class="unit">dB</span>`;
-        document.getElementById('avgL').innerHTML = `${avgL.toFixed(1)}<span class="unit">dB</span>`;
-    }
-
-    function setChartMode(m) { 
-        chartMode = m; 
-        document.getElementById('btnR').className = m==='R'?'btn active-r':'btn'; 
-        document.getElementById('btnL').className = m==='L'?'btn active-l':'btn'; 
-    }
-
-    /* --- 신규 시뮬레이터 로직 --- */
-    let isBinaural = true;
-    const baseText = "보청기는 단순한 스피커가 아니라 뇌로 전달되는 해상도를 관리합니다.";
-    const nerveIn = document.getElementById('nerve-damage');
-    const noiseIn = document.getElementById('noise-level');
-    const volumeIn = document.getElementById('volume');
-    const nrToggle = document.getElementById('nr-toggle');
-    const textTarget = document.getElementById('text-target');
-    const statusMsg = document.getElementById('status-msg');
-    const canvas = document.getElementById('waveform');
-    const ctxW = canvas.getContext('2d');
-
-    function setPreset(nerve, noise, vol) {
-        nerveIn.value = nerve; noiseIn.value = noise; volumeIn.value = vol;
-        updateSim();
-    }
-
-    function setWearingMode(val) {
-        isBinaural = val;
-        document.getElementById('btn-binaural').classList.toggle('active', isBinaural);
-        document.getElementById('btn-monaural').classList.toggle('active', !isBinaural);
-        updateSim();
-    }
-
-    function updateSim() {
-        const nerve = parseInt(nerveIn.value);
-        const noise = parseInt(noiseIn.value);
-        const volume = parseInt(volumeIn.value) / 100;
-        const isNR = nrToggle.checked;
-
-        let effNoise = noise;
-        if (isNR) effNoise *= 0.35;
-        if (isBinaural) effNoise *= 0.7;
-
-        let threshold = nerve + (effNoise * 0.7);
-        if (isBinaural) threshold -= 15;
-
-        if (threshold > 75) textTarget.innerText = "ㅂㅗㅊㅓㅇㄱㅣㄴㅡㄴ... ㄴ뇌ㄹㅗ... ㅎㅐㅅㅏㅇㄷㅗㄹㅡㄹ...";
-        else if (threshold > 45) textTarget.innerText = "보청기는 단순한 ㅅㅍㅣ커가 아니라 해상도를 관리합니다.";
-        else if (threshold > 20) textTarget.innerText = "보청기는 단순한 스피커가 아니라 ... 관리합니다.";
-        else textTarget.innerText = baseText;
-
-        let blurVal = Math.max(0, (nerve - (isBinaural ? 15 : 0)) / 10);
-        textTarget.style.filter = `blur(${blurVal}px)`;
-        textTarget.style.fontSize = (volume * 1.6) + "rem";
-
-        if (isBinaural && isNR && noise > 40) {
-            statusMsg.innerHTML = "✨ <span class='highlight'>프리미엄 청취:</span> 양이 통신과 소음 억제가 결합되어 대화가 쾌적합니다.";
-        } else if (isBinaural) {
-            statusMsg.innerHTML = "✅ <span class='highlight'>양이 착용 중:</span> 방향감과 선명도가 유지됩니다.";
-        } else {
-            statusMsg.innerHTML = "⚠️ <span class='highlight'>편이 착용 중:</span> 소음 속 분별력이 크게 떨어집니다.";
-        }
-
-        document.getElementById('val-nerve').innerText = nerve + "%";
-        document.getElementById('val-noise').innerText = noise + "%";
-        document.getElementById('val-volume').innerText = Math.round(volume * 100) + "%";
-    }
-
-    function drawWave() {
-        ctxW.clearRect(0, 0, canvas.width, canvas.height);
-        const noise = parseInt(noiseIn.value);
-        const isNR = nrToggle.checked;
-        const time = Date.now() * 0.005;
-        const baseY = canvas.height * 0.75; 
-
-        ctxW.beginPath();
-        ctxW.lineWidth = 3;
-        ctxW.strokeStyle = isNR ? 'rgba(46, 204, 113, 0.7)' : 'rgba(52, 152, 219, 0.8)';
-        let effW = noise * (isNR ? 0.4 : 1);
-
-        for (let x = 0; x < canvas.width; x += 5) {
-            let y = baseY + Math.sin(x * 0.02 + time) * (effW * 0.8) + (Math.random() - 0.5) * (effW * 0.5);
-            if (x === 0) ctxW.moveTo(x, y); else ctxW.lineTo(x, y);
-        }
-        ctxW.stroke();
-        requestAnimationFrame(drawWave);
-    }
-
-    window.onresize = () => { if(canvas.parentElement) { canvas.width = canvas.parentElement.clientWidth; canvas.height = 220; } };
-    window.onresize();
-    [nerveIn, noiseIn, volumeIn].forEach(el => el.oninput = updateSim);
-    nrToggle.onchange = updateSim;
-
-    // 초기 실행
-    calculateAverage();
-    updateSim();
-    drawWave();
-</script>
-</body>
-</html>
+        <div class="btn-
